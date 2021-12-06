@@ -67,6 +67,7 @@ func main() {
 			}
 		}
 
+		var won bool
 		for i, boardResult := range boardResults {
 			for _, row := range boardResult {
 				total := 0
@@ -76,21 +77,22 @@ func main() {
 					}
 				}
 				if total == 5 {
-					fmt.Println(boardResult)
-					fmt.Println(bingoCards[i])
-					result := 0
-					for j, row := range boardResult {
-						for k, called := range row {
-							if !called {
-								result += bingoCards[i][j][k]
-							}
-						}
-					}
-					fmt.Println(result * calledNumber)
-					return
+					won = true
+					break
 				}
 			}
+			if won {
+				result := 0
+				for j, row := range boardResult {
+					for k, called := range row {
+						if !called {
+							result += bingoCards[i][j][k]
+						}
+					}
+				}
+				fmt.Println(result * calledNumber)
+				return
+			}
 		}
-
 	}
 }
