@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	file, err := os.Open("04/input.txt")
+	file, err := os.Open("04/test.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -53,11 +53,10 @@ func main() {
 		}
 	}
 
-	var boardResults [][5][5]bool
+	boardResults := make([][5][5]bool, len(bingoCards))
 
 	for _, calledNumber := range calledNumbers {
 		for i, bingoCard := range bingoCards {
-			boardResults = append(boardResults, [5][5]bool{})
 			for j, row := range bingoCard {
 				for k, number := range row {
 					if number == calledNumber {
@@ -67,7 +66,9 @@ func main() {
 			}
 		}
 
+		// Each iteration we need to check if the board has a winning row
 		var won bool
+		wonBoards := 0
 		for i, boardResult := range boardResults {
 			for _, row := range boardResult {
 				total := 0
@@ -78,11 +79,24 @@ func main() {
 				}
 				if total == 5 {
 					won = true
-					break
 				}
 			}
+
+			for i := 0; i < 5; i++ {
+				total := 0
+				for _, row := range boardResult {
+					if row[i] {
+						total++
+					}
+					if total == 5 {
+						won = true
+					}
+				}
+
+			}
+			var result int
 			if won {
-				result := 0
+				result = 0
 				for j, row := range boardResult {
 					for k, called := range row {
 						if !called {
@@ -90,9 +104,16 @@ func main() {
 						}
 					}
 				}
+				if wonBoards == 0 {
+					fmt.Println(result * calledNumber)
+				}
+				wonBoards++
+			}
+			if wonBoards == len(bingoCards) {
 				fmt.Println(result * calledNumber)
-				return
 			}
 		}
 	}
 }
+
+// 20213 (answer given above) is *too low*.
