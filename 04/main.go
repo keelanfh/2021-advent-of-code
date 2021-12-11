@@ -54,8 +54,12 @@ func main() {
 	}
 
 	boardResults := make([][5][5]bool, len(bingoCards))
+	var count int
+	firstWinner := true
+	wonBoards := make([]bool, len(bingoCards))
 
 	for _, calledNumber := range calledNumbers {
+		count++
 		for i, bingoCard := range bingoCards {
 			for j, row := range bingoCard {
 				for k, number := range row {
@@ -68,8 +72,9 @@ func main() {
 
 		// Each iteration we need to check if the board has a winning row
 		var won bool
-		wonBoards := 0
-		for i, boardResult := range boardResults {
+
+		for boardNumber, boardResult := range boardResults {
+			count++
 			for _, row := range boardResult {
 				total := 0
 				for _, called := range row {
@@ -96,21 +101,36 @@ func main() {
 			}
 			var result int
 			if won {
-				result = 0
 				for j, row := range boardResult {
 					for k, called := range row {
 						if !called {
-							result += bingoCards[i][j][k]
+							result += bingoCards[boardNumber][j][k]
 						}
 					}
 				}
-				if wonBoards == 0 {
+				if firstWinner {
 					fmt.Println(result * calledNumber)
+					firstWinner = false
 				}
-				wonBoards++
-			}
-			if wonBoards == len(bingoCards) {
-				fmt.Println(result * calledNumber)
+
+				// mark board as won
+				wonBoards[boardNumber] = true
+				fmt.Println(wonBoards)
+
+				allBoardsWon := true
+				// check if every board has been won
+				for _, wonBoard := range wonBoards {
+					if !wonBoard {
+						allBoardsWon = false
+					}
+				}
+
+				if allBoardsWon {
+					fmt.Println(boardResult)
+					fmt.Println(result, calledNumber)
+					fmt.Println(result * calledNumber)
+					return
+				}
 			}
 		}
 	}

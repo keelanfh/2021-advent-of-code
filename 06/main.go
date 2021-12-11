@@ -23,16 +23,14 @@ func main() {
 	}
 
 	sliceOfStrings := strings.Split(line, ",")
-	ageMap := make(map[int]int)
+	var ageMap [9]int
 	for _, s := range sliceOfStrings {
 		i, _ := strconv.Atoi(s)
 		ageMap[i]++
 	}
 
-	var newAgeMap map[int]int
-
 	for day := 1; day <= 256; day++ {
-		newAgeMap = make(map[int]int)
+		var newAgeMap [9]int
 		for k, v := range ageMap {
 			if k == 0 {
 				newAgeMap[6] += v
@@ -42,9 +40,10 @@ func main() {
 			}
 		}
 		ageMap = newAgeMap
+
 	}
 
-	result := 0
+	var result int
 	for _, v := range ageMap {
 		result += v
 	}

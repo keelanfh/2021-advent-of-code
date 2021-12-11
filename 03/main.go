@@ -93,12 +93,13 @@ func findRating(gamma, bit, ndigits, mode uint, nums []uint) uint {
 		}
 	}
 	if len(result) > 1 {
+		gamma, epsilon := mostLeastCommonDigit(ndigits, result)
 		if mode == 1 {
-			gamma, _ = mostLeastCommonDigit(ndigits, result)
+			return findRating(gamma, bit-1, ndigits, mode, result)
 		} else {
-			_, gamma = mostLeastCommonDigit(ndigits, result)
+			return findRating(epsilon, bit-1, ndigits, mode, result)
 		}
-		return findRating(gamma, bit-1, ndigits, mode, result)
+
 	} else {
 		return result[0]
 	}

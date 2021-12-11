@@ -18,8 +18,7 @@ func main() {
 
 	scanner := bufio.NewScanner(file)
 
-	hpos := 0
-	depth := 0
+	var hpos, depth int
 	for scanner.Scan() {
 		split := strings.Split(scanner.Text(), " ")
 		op, argString := split[0], split[1]
@@ -44,9 +43,8 @@ func main() {
 
 	scanner = bufio.NewScanner(file)
 
-	hpos = 0
-	depth = 0
-	aim := 0
+	hpos, depth = 0, 0
+	var aim int
 	for scanner.Scan() {
 		split := strings.Split(scanner.Text(), " ")
 		op, argString := split[0], split[1]
