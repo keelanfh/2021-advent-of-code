@@ -39,14 +39,14 @@ func main() {
 
 	scanner := bufio.NewScanner(file)
 
-	var match = map[rune]rune{
+	match := map[rune]rune{
 		')': '(',
 		']': '[',
 		'}': '{',
 		'>': '<',
 	}
 
-	var values = map[rune]int{
+	values := map[rune]int{
 		')': 3,
 		']': 57,
 		'}': 1197,
@@ -55,7 +55,7 @@ func main() {
 
 	// we value these based on the opening, rather than closing
 	// this just keeps it simpler
-	var completionValues = map[rune]int{
+	completionValues := map[rune]int{
 		'(': 1,
 		'[': 2,
 		'{': 3,
@@ -70,6 +70,8 @@ func main() {
 		line := scanner.Text()
 		corrupted = false
 		// Set up the ring
+		// We add an extra element
+		// So we can keep track of the beginning/end
 		r := ring.New(len(line) + 1)
 
 		// Load the characters in

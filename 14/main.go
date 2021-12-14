@@ -17,53 +17,47 @@ func main() {
 
 	scanner := bufio.NewScanner(file)
 
-	var polymerTemplate string
+	var polymerTemplate []rune
 	first := true
-	re := regexp.MustCompile(`^([A-Z])([A-Z]) -> ([A-Z])$`)
-	findToReplace := make(map[string]rune)
+	re := regexp.MustCompile(`^([A-Z]{2}) -> ([A-Z])$`)
+	findToInsert := make(map[string]rune)
 
 	for scanner.Scan() {
 		line := scanner.Text()
 		if first {
-			polymerTemplate = line
+			polymerTemplate = []rune(line)
 			first = false
 		} else if line != "" {
 			matches := re.FindStringSubmatch(line)
-
-			findString := matches[1] + matches[2]
-			replaceString := []rune(matches[3])[0]
-
-			findToReplace[findString] = replaceString
+			findToInsert[matches[1]] = []rune(matches[2])[0]
 		}
 	}
-	polymerTemplateRunes := []rune(polymerTemplate)
-	var resultString []rune
-	for step := 1; step <= 40; step++ {
-		resultString = make([]rune, 0)
+	var output []rune
+	for step := 1; step <= 10; step++ {
+		output = make([]rune, 0)
 
-		for i := 0; i <= len(polymerTemplateRunes)-2; i++ {
+		for i := 0; i <= len(polymerTemplate)-2; i++ {
 
-			resultString = append(resultString, polymerTemplateRunes[i])
-			insertString := findToReplace[string(polymerTemplateRunes[i:i+2])]
+			output = append(output, polymerTemplate[i])
+			insertString := findToInsert[string(polymerTemplate[i:i+2])]
+
+			// 0 is the nil value for rune, because rune is just int32
 			if insertString != 0 {
-				resultString = append(resultString, insertString)
+				output = append(output, insertString)
 			}
 
-			// fmt.Println("result:", string(resultString))
 		}
 
-		resultString = append(resultString, polymerTemplateRunes[len(polymerTemplateRunes)-1])
+		output = append(output, polymerTemplate[len(polymerTemplate)-1])
 
-		// fmt.Println("step", step+1, string(resultString))
-
-		polymerTemplateRunes = resultString
-		fmt.Println(step, len(polymerTemplateRunes))
+		polymerTemplate = output
+		fmt.Println(step, len(polymerTemplate))
 
 	}
 
 	counter := make(map[rune]int)
 
-	for _, char := range resultString {
+	for _, char := range output {
 		counter[char]++
 	}
 
