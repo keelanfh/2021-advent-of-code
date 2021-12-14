@@ -9,8 +9,37 @@ import (
 	"strings"
 )
 
+func checkIfBoardWon(boardResult [5][5]bool) bool {
+	var won bool
+
+	for _, row := range boardResult {
+		total := 0
+		for _, called := range row {
+			if called {
+				total++
+			}
+		}
+		if total == 5 {
+			won = true
+		}
+	}
+
+	for i := 0; i < 5; i++ {
+		total := 0
+		for _, row := range boardResult {
+			if row[i] {
+				total++
+			}
+			if total == 5 {
+				won = true
+			}
+		}
+	}
+	return won
+}
+
 func main() {
-	file, err := os.Open("04/test.txt")
+	file, err := os.Open("04/input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -40,9 +69,7 @@ func main() {
 			currentCard++
 			bingoCards = append(bingoCards, [5][5]int{})
 		} else {
-			rowNumberStrings := strings.Fields(scanner.Text())
-			for i, rowNumberString := range rowNumberStrings {
-				// fmt.Println(rowNumberString)
+			for i, rowNumberString := range strings.Fields(scanner.Text()) {
 				number, err := strconv.Atoi(rowNumberString)
 				if err != nil {
 					log.Fatal(err)
@@ -54,12 +81,11 @@ func main() {
 	}
 
 	boardResults := make([][5][5]bool, len(bingoCards))
-	var count int
 	firstWinner := true
 	wonBoards := make([]bool, len(bingoCards))
 
+	// Mark the called number everywhere it appears
 	for _, calledNumber := range calledNumbers {
-		count++
 		for i, bingoCard := range bingoCards {
 			for j, row := range bingoCard {
 				for k, number := range row {
@@ -71,54 +97,32 @@ func main() {
 		}
 
 		// Each iteration we need to check if the board has a winning row
-		var won bool
 
 		for boardNumber, boardResult := range boardResults {
-			count++
-			for _, row := range boardResult {
-				total := 0
-				for _, called := range row {
-					if called {
-						total++
-					}
-				}
-				if total == 5 {
-					won = true
-				}
-			}
+			won := checkIfBoardWon(boardResult)
 
-			for i := 0; i < 5; i++ {
-				total := 0
-				for _, row := range boardResult {
-					if row[i] {
-						total++
-					}
-					if total == 5 {
-						won = true
-					}
-				}
-
-			}
-			var result int
-			if won {
+			var sumUnmarkedNumbers int
+			// We only want to do this the first time a board is won
+			// The board might be won again later with another row
+			if won && !wonBoards[boardNumber] {
 				for j, row := range boardResult {
-					for k, called := range row {
-						if !called {
-							result += bingoCards[boardNumber][j][k]
+					for k, marked := range row {
+						if !marked {
+							sumUnmarkedNumbers += bingoCards[boardNumber][j][k]
 						}
 					}
 				}
+				// Print the result for part 1
 				if firstWinner {
-					fmt.Println(result * calledNumber)
+					fmt.Println(sumUnmarkedNumbers * calledNumber)
 					firstWinner = false
 				}
 
 				// mark board as won
 				wonBoards[boardNumber] = true
-				fmt.Println(wonBoards)
 
-				allBoardsWon := true
 				// check if every board has been won
+				allBoardsWon := true
 				for _, wonBoard := range wonBoards {
 					if !wonBoard {
 						allBoardsWon = false
@@ -126,14 +130,10 @@ func main() {
 				}
 
 				if allBoardsWon {
-					fmt.Println(boardResult)
-					fmt.Println(result, calledNumber)
-					fmt.Println(result * calledNumber)
+					fmt.Println(sumUnmarkedNumbers * calledNumber)
 					return
 				}
 			}
 		}
 	}
 }
-
-// 20213 (answer given above) is *too low*.

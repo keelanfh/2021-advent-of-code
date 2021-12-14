@@ -81,7 +81,6 @@ func main() {
 		// Move back to the beginning of the ring
 		r = r.Next()
 
-		// counter := 0
 		for r.Value != nil {
 			if isClosing(r.Value.(rune)) {
 				if r.Prev().Value.(rune) == match[r.Value.(rune)] {

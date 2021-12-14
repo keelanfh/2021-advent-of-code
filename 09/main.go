@@ -41,10 +41,9 @@ func main() {
 				i_diff, j_diff := i+diff[0], j+diff[1]
 				if i_diff < 0 || i_diff >= len(grid) || j_diff < 0 || j_diff >= len(line) {
 					// out of bounds of array
-					fmt.Println(i, j)
 					continue
 				}
-				if grid[i_diff][j_diff] < num {
+				if grid[i_diff][j_diff] <= num {
 					// not a low point
 					low = false
 				}
