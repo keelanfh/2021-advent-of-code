@@ -19,8 +19,8 @@ func main() {
 
 	var polymerTemplate []rune
 	first := true
-	re := regexp.MustCompile(`^([A-Z]{2}) -> ([A-Z])$`)
-	findToInsert := make(map[string]rune)
+	re := regexp.MustCompile(`^([A-Z])([A-Z]) -> ([A-Z])$`)
+	pairToNewPairs := make(map[[2]rune][2][2]rune)
 
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -29,43 +29,65 @@ func main() {
 			first = false
 		} else if line != "" {
 			matches := re.FindStringSubmatch(line)
-			findToInsert[matches[1]] = []rune(matches[2])[0]
+			// This all feels a bit awkward, but I can't think of a better
+			// way of getting from string to [n]rune
+
+			var from [2]rune
+			for i, char := range matches[1] + matches[2] {
+				from[i] = char
+			}
+
+			var to [2][2]rune
+
+			for i, char := range matches[1] + matches[3] {
+				to[0][i] = char
+			}
+
+			for i, char := range matches[3] + matches[2] {
+				to[1][i] = char
+			}
+
+			pairToNewPairs[from] = to
 		}
+
 	}
-	var output []rune
-	for step := 1; step <= 10; step++ {
-		output = make([]rune, 0)
 
-		for i := 0; i <= len(polymerTemplate)-2; i++ {
+	pairCounter := make(map[[2]rune]int)
 
-			output = append(output, polymerTemplate[i])
-			insertString := findToInsert[string(polymerTemplate[i:i+2])]
+	// reading in the starting data
+	var from [2]rune
+	for i := 0; i < len(polymerTemplate)-1; i++ {
+		copy(from[:], polymerTemplate[i:i+2])
+		pairCounter[from]++
+	}
 
-			// 0 is the nil value for rune, because rune is just int32
-			if insertString != 0 {
-				output = append(output, insertString)
+	// stepping through the required number of iterations
+	for step := 1; step <= 40; step++ {
+		newPairCounter := make(map[[2]rune]int)
+		for current, number := range pairCounter {
+			for _, newPair := range pairToNewPairs[current] {
+				newPairCounter[newPair] += number
 			}
 
 		}
-
-		output = append(output, polymerTemplate[len(polymerTemplate)-1])
-
-		polymerTemplate = output
-		fmt.Println(step, len(polymerTemplate))
-		fmt.Println(string(polymerTemplate))
-
+		pairCounter = newPairCounter
 	}
 
-	counter := make(map[rune]int)
+	// Now we just need to go from a count of pairs to a count of letters
+	letterCounter := make(map[rune]int)
 
-	for _, char := range output {
-		counter[char]++
+	for k, v := range pairCounter {
+		for _, char := range k {
+			letterCounter[char] += v
+		}
 	}
 
-	minValue := math.MaxInt32
+	// Had to increase this to math.MaxInt64 because the smallest number in the array
+	// is larger than math.MaxInt32
+	minValue := math.MaxInt64
 	maxValue := 0
 
-	for _, value := range counter {
+	for _, value := range letterCounter {
 		if value > maxValue {
 			maxValue = value
 		}
@@ -74,6 +96,9 @@ func main() {
 		}
 	}
 
-	fmt.Println(maxValue - minValue)
-
+	// we're basically just halving here - but rounding up the odd numbers
+	// this is because the starting and ending letters are only counted once
+	// All the others are counted twice
+	// The floor division will mean that adding 1 to an even number makes no difference
+	fmt.Println(((maxValue+1)/2 - (minValue+1)/2))
 }
