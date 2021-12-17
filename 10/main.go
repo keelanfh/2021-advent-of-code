@@ -69,6 +69,7 @@ func main() {
 	for scanner.Scan() {
 		line := scanner.Text()
 		corrupted = false
+
 		// Set up the ring
 		// We add an extra element
 		// So we can keep track of the beginning/end

@@ -38,7 +38,6 @@ func main() {
 		}
 	}
 
-	// var bestPosition int
 	minFuel := math.MaxInt32
 	minPartTwoFuel := math.MaxInt32
 

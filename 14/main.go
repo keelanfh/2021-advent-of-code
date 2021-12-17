@@ -52,6 +52,7 @@ func main() {
 
 		polymerTemplate = output
 		fmt.Println(step, len(polymerTemplate))
+		fmt.Println(string(polymerTemplate))
 
 	}
 
