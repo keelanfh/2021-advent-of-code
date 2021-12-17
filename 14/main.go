@@ -29,23 +29,15 @@ func main() {
 			first = false
 		} else if line != "" {
 			matches := re.FindStringSubmatch(line)
-			// This all feels a bit awkward, but I can't think of a better
-			// way of getting from string to [n]rune
 
-			var from [2]rune
-			for i, char := range matches[1] + matches[2] {
-				from[i] = char
+			var matchesRunes [4]rune
+			for i := 0; i < 4; i++ {
+				matchesRunes[i] = []rune(matches[i])[0]
 			}
 
-			var to [2][2]rune
+			from := [2]rune{matchesRunes[1], matchesRunes[2]}
 
-			for i, char := range matches[1] + matches[3] {
-				to[0][i] = char
-			}
-
-			for i, char := range matches[3] + matches[2] {
-				to[1][i] = char
-			}
+			to := [2][2]rune{{matchesRunes[1], matchesRunes[3]}, {matchesRunes[3], matchesRunes[2]}}
 
 			pairToNewPairs[from] = to
 		}
