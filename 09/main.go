@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"sort"
-	"strconv"
 
 	"github.com/keelanfh/2021-advent-of-code/utils"
 )
@@ -60,19 +59,7 @@ func addToBasin(i, j, num int) (bool, int) {
 
 func main() {
 
-	scanner := utils.ReadFileLines("09/input.txt")
-
-	for scanner.Scan() {
-		var list []int
-		line := scanner.Text()
-		for _, char := range line {
-			num, _ := strconv.Atoi(string(char))
-			list = append(list, num)
-		}
-		grid = append(grid, list)
-	}
-
-	var risk int
+	grid = utils.ReadFileGridInts("09/input.txt")
 
 	length = len(grid)
 	width = len(grid[0])
@@ -82,6 +69,7 @@ func main() {
 		inBasinGrid[i] = make([]inBasinResult, width)
 	}
 
+	var risk int
 	diffs = [][2]int{{-1, 0}, {0, 1}, {1, 0}, {0, -1}}
 
 	for i, line := range grid {
@@ -110,6 +98,7 @@ func main() {
 
 	basinSizes = make([]int, len(lowPoints))
 
+	// Adding one to every basin, as the low point is in the basin too
 	for i := range basinSizes {
 		basinSizes[i]++
 	}

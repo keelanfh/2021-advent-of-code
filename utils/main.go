@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"log"
 	"os"
+	"strconv"
 )
 
 func ReadFileLines(path string) *bufio.Scanner {
@@ -13,6 +14,21 @@ func ReadFileLines(path string) *bufio.Scanner {
 	}
 
 	return bufio.NewScanner(file)
+}
+
+func ReadFileGridInts(path string) [][]int {
+	var grid [][]int
+	scanner := ReadFileLines(path)
+	for scanner.Scan() {
+		var list []int
+		line := scanner.Text()
+		for _, char := range line {
+			num, _ := strconv.Atoi(string(char))
+			list = append(list, num)
+		}
+		grid = append(grid, list)
+	}
+	return grid
 }
 
 // func PrintGrid(grid [][]interface{}) {
