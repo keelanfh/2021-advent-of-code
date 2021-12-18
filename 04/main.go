@@ -1,12 +1,12 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"log"
-	"os"
 	"strconv"
 	"strings"
+
+	"github.com/keelanfh/2021-advent-of-code/utils"
 )
 
 func checkIfBoardWon(boardResult [5][5]bool) bool {
@@ -39,12 +39,8 @@ func checkIfBoardWon(boardResult [5][5]bool) bool {
 }
 
 func main() {
-	file, err := os.Open("04/input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
 
-	scanner := bufio.NewScanner(file)
+	scanner := utils.ReadFileLines("04/input.txt")
 
 	var calledNumbers []int
 	var bingoCards [][5][5]int

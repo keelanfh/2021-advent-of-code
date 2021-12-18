@@ -1,21 +1,15 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"log"
 	"math"
-	"os"
 	"regexp"
+
+	"github.com/keelanfh/2021-advent-of-code/utils"
 )
 
 func main() {
-	file, err := os.Open("14/input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	scanner := bufio.NewScanner(file)
+	scanner := utils.ReadFileLines("14/input.txt")
 
 	var polymerTemplate []rune
 	first := true

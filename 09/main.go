@@ -1,21 +1,15 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"log"
-	"os"
 	"strconv"
+
+	"github.com/keelanfh/2021-advent-of-code/utils"
 )
 
 func main() {
 
-	file, err := os.Open("09/input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	scanner := bufio.NewScanner(file)
+	scanner := utils.ReadFileLines("09/input.txt")
 
 	var grid [][]int
 	// for _, line := range grid {

@@ -1,12 +1,11 @@
 package main
 
 import (
-	"bufio"
 	"container/ring"
 	"fmt"
-	"log"
-	"os"
 	"sort"
+
+	"github.com/keelanfh/2021-advent-of-code/utils"
 )
 
 func isClosing(c rune) bool {
@@ -32,12 +31,7 @@ func printRing(r *ring.Ring) {
 }
 
 func main() {
-	file, err := os.Open("10/input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	scanner := bufio.NewScanner(file)
+	scanner := utils.ReadFileLines("10/input.txt")
 
 	match := map[rune]rune{
 		')': '(',

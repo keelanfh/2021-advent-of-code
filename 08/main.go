@@ -1,20 +1,14 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"log"
-	"os"
 	"strings"
+
+	"github.com/keelanfh/2021-advent-of-code/utils"
 )
 
 func main() {
-	file, err := os.Open("08/input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	scanner := bufio.NewScanner(file)
+	scanner := utils.ReadFileLines("08/input.txt")
 
 	var total int
 

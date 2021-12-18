@@ -1,21 +1,16 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"log"
-	"os"
 	"regexp"
 	"strconv"
+
+	"github.com/keelanfh/2021-advent-of-code/utils"
 )
 
 func main() {
-	file, err := os.Open("05/input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
 
-	scanner := bufio.NewScanner(file)
+	scanner := utils.ReadFileLines("05/input.txt")
 
 	var results_grid [1000][1000]int
 	var part_two_grid [1000][1000]int

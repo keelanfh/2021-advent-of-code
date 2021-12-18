@@ -7,7 +7,7 @@ import (
 )
 
 func ReadFileLines(path string) *bufio.Scanner {
-	file, err := os.Open("02/input.txt")
+	file, err := os.Open(path)
 	if err != nil {
 		log.Fatal(err)
 	}
