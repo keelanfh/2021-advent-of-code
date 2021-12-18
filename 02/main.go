@@ -1,24 +1,18 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"log"
-	"os"
 	"strconv"
 	"strings"
+
+	"github.com/keelanfh/2021-advent-of-code/utils"
 )
 
 func main() {
-	// Part 1
-	file, err := os.Open("02/input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	scanner := bufio.NewScanner(file)
 
 	var hpos, depth int
+
+	scanner := utils.ReadFileLines("02/input.txt")
 	for scanner.Scan() {
 		split := strings.Split(scanner.Text(), " ")
 		op, argString := split[0], split[1]
@@ -35,13 +29,7 @@ func main() {
 
 	fmt.Println(hpos * depth)
 
-	// Part 2
-	file, err = os.Open("02/input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	scanner = bufio.NewScanner(file)
+	scanner = utils.ReadFileLines("02/input.txt")
 
 	hpos, depth = 0, 0
 	var aim int
