@@ -9,49 +9,44 @@ import (
 
 var pathMap map[string][]string
 var totalPaths int
-var allPaths map[string]bool
 
-func countPaths(start string, alreadyVisited, alreadyVisitedTwice []string) int {
-	fmt.Println(append(alreadyVisited, start), alreadyVisitedTwice)
+func countPaths(start string, alreadyVisited, alreadyVisitedTwice []string) {
 
+	// if we reach the end, we know this is a valid path
 	if start == "end" {
 		totalPaths++
-		fmt.Println("\t\t", append(alreadyVisited, start))
-		allPaths[fmt.Sprint(append(alreadyVisited, start))] = true
 	}
 
-	// If we've already visited this before, return 0
+	// If we've already visited this twice before, return
 	if strings.ToLower(start) == start {
 		for _, cave := range alreadyVisitedTwice {
 			if cave == start {
-				return 0
+				return
 			}
 		}
 	}
 
-	// If we've already visited this before, return 0
+	// If we've already visited this once before, add to alreadyVisitedTwice
 	if strings.ToLower(start) == start {
 		for _, cave := range alreadyVisited {
 			if cave == start {
+				// We're only allowed to visit one cave twice - start will also be in the list of visited twice
+				if len(alreadyVisitedTwice) > 1 {
+					return
+				}
 				alreadyVisitedTwice = append(alreadyVisitedTwice, start)
 			}
 		}
 	}
-
-	var totalPaths int
+	// Trying out all the possible next steps
 	for _, nextStep := range pathMap[start] {
-		totalPaths += countPaths(nextStep, append(alreadyVisited, start), alreadyVisitedTwice)
-		// if nextStep == "end" {
-		// 	return 1
-		// }
+		countPaths(nextStep, append(alreadyVisited, start), alreadyVisitedTwice)
 	}
-	return totalPaths
 }
 
 func main() {
-	allPaths = make(map[string]bool)
 
-	scanner := utils.ReadFileLines("12/test.txt")
+	scanner := utils.ReadFileLines("12/input.txt")
 
 	pathMap = make(map[string][]string)
 
@@ -67,7 +62,5 @@ func main() {
 	}
 
 	countPaths("start", []string{"start"}, []string{})
-	fmt.Println(pathMap)
 	fmt.Println(totalPaths)
-	fmt.Println(len(allPaths))
 }
