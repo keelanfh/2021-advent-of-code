@@ -10,32 +10,28 @@ import (
 var pathMap map[string][]string
 var totalPaths int
 
-func countPaths(start string, alreadyVisited, alreadyVisitedTwice []string) {
+func countPaths(start string, alreadyVisited, alreadyVisitedTwice utils.StringSlice) {
 
 	// if we reach the end, we know this is a valid path
+	// Need to return from this as otherwise we'll keep counting like A-end-A-end
 	if start == "end" {
 		totalPaths++
-	}
-
-	// If we've already visited this twice before, return
-	if strings.ToLower(start) == start {
-		for _, cave := range alreadyVisitedTwice {
-			if cave == start {
-				return
-			}
-		}
+		return
 	}
 
 	// If we've already visited this once before, add to alreadyVisitedTwice
-	if strings.ToLower(start) == start {
-		for _, cave := range alreadyVisited {
-			if cave == start {
-				// We're only allowed to visit one cave twice - start will also be in the list of visited twice
-				if len(alreadyVisitedTwice) > 1 {
-					return
-				}
-				alreadyVisitedTwice = append(alreadyVisitedTwice, start)
+	if utils.StringIsLower(start) {
+		// If we've already visited this twice before, return
+		if alreadyVisitedTwice.Contains(start) {
+			return
+		}
+
+		if alreadyVisited.Contains(start) {
+			// We're only allowed to visit one cave twice - start will also be in the list of visited twice
+			if len(alreadyVisitedTwice) > 1 {
+				return
 			}
+			alreadyVisitedTwice = append(alreadyVisitedTwice, start)
 		}
 	}
 	// Trying out all the possible next steps
@@ -54,11 +50,8 @@ func main() {
 		pathSlice := strings.Split(scanner.Text(), "-")
 
 		// This loop just means that we add each of the paths in both directions
-		// We skip paths starting with 'end' - this stops us counting paths like A-end-A-end
 		for i := 0; i <= 1; i++ {
-			if pathSlice[i] != "end" {
-				pathMap[pathSlice[i]] = append(pathMap[pathSlice[i]], pathSlice[1-i])
-			}
+			pathMap[pathSlice[i]] = append(pathMap[pathSlice[i]], pathSlice[1-i])
 		}
 	}
 

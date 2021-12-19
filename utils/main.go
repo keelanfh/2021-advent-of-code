@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func ReadFileLines(path string) *bufio.Scanner {
@@ -29,6 +30,21 @@ func ReadFileGridInts(path string) [][]int {
 		grid = append(grid, list)
 	}
 	return grid
+}
+
+type StringSlice []string
+
+func (sa StringSlice) Contains(s string) bool {
+	for _, t := range sa {
+		if s == t {
+			return true
+		}
+	}
+	return false
+}
+
+func StringIsLower(s string) bool {
+	return strings.ToLower(s) == s
 }
 
 // func PrintGrid(grid [][]interface{}) {
