@@ -53,9 +53,9 @@ func main() {
 							if !outOfBounds(i_diff, j_diff) {
 								// Just incrementing works here, because newGrid==grid
 								newGrid[i_diff][j_diff]++
-								// Mark this as an octopus that has flashed
 							}
 						}
+						// Mark this as an octopus that has flashed
 						newGrid[i][j] = math.MinInt32
 						flashes++
 					}
