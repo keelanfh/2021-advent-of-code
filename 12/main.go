@@ -52,13 +52,14 @@ func main() {
 
 	for scanner.Scan() {
 		pathSlice := strings.Split(scanner.Text(), "-")
-		if pathSlice[0] != "end" {
-			pathMap[pathSlice[0]] = append(pathMap[pathSlice[0]], pathSlice[1])
+
+		// This loop just means that we add each of the paths in both directions
+		// We skip paths starting with 'end' - this stops us counting paths like A-end-A-end
+		for i := 0; i <= 1; i++ {
+			if pathSlice[i] != "end" {
+				pathMap[pathSlice[i]] = append(pathMap[pathSlice[i]], pathSlice[1-i])
+			}
 		}
-		if pathSlice[1] != "end" {
-			pathMap[pathSlice[1]] = append(pathMap[pathSlice[1]], pathSlice[0])
-		}
-		// Need to add something here so that we don't include end- paths when declared like that
 	}
 
 	countPaths("start", []string{"start"}, []string{})
